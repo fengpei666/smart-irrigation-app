@@ -1,0 +1,18 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // MPAndroidChart 通过 JitPack 分发
+        maven { url 'https://jitpack.io' }
+    }
+}
+rootProject.name = "SmartIrrigation"
+include ':app'

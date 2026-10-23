@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">智慧灌溉</string>
+
+    <string-array name="alert_status_options">
+        <item>进行中</item>
+        <item>全部</item>
+    </string-array>
+
+    <string-array name="schedule_type_options">
+        <item>定时执行</item>
+        <item>条件触发</item>
+        <item>轮灌间隔</item>
+    </string-array>
+
+    <string-array name="schedule_condition_options">
+        <item>土壤低于 soil_below</item>
+        <item>温度高于 temp_above</item>
+        <item>湿度低于 humi_below</item>
+        <item>光照低于 light_below</item>
+    </string-array>
+
+    <string-array name="calibration_kind_options">
+        <item>土壤湿度 soil</item>
+        <item>光照 light</item>
+        <item>水位 water</item>
+    </string-array>
+
+    <string-array name="history_interval_options">
+        <item>原始 raw</item>
+        <item>5 分钟聚合</item>
+        <item>1 小时聚合</item>
+    </string-array>
+</resources>
