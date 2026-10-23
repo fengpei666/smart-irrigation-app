@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     一键发版：编译 release APK → 在 GitHub 上建 Release → 上传 APK。
 
@@ -97,7 +97,8 @@ Write-Host "✓ APK 就绪：$apkPath（$apkSizeMb MB）" -ForegroundColor Green
 # ---------- 4. 整理 Release 说明 ----------
 if ($NotesFile) {
     if (-not (Test-Path $NotesFile)) { Fail "说明文件不存在：$NotesFile" }
-    $Notes = Get-Content $NotesFile -Raw
+    # 显式按 UTF-8 读：Windows PowerShell 5.1 默认按 ANSI 读无 BOM 文件会把中文读花
+    $Notes = Get-Content $NotesFile -Raw -Encoding UTF8
 }
 if (-not $Notes -or $Notes.Trim().Length -eq 0) {
     $Notes = "v$Version（$([DateTime]::Now.ToString('yyyy-MM-dd')) 构建）"
@@ -156,6 +157,6 @@ try {
 }
 
 Write-Host ""
-Write-Host "发版完成 🎉" -ForegroundColor Cyan
+Write-Host "发版完成" -ForegroundColor Cyan
 Write-Host "发布页：$($release.html_url)"
 Write-Host "App 内路径：设置 → 检查更新（或重启 App 自动提示）"
