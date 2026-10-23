@@ -7,3 +7,8 @@ build/
 captures/
 .externalNativeBuild/
 .cxx/
+
+# 发布签名（本地私有，不入库）
+keystore.properties
+*.jks
+*.keystore

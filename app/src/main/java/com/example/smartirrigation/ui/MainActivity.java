@@ -74,6 +74,19 @@ public class MainActivity extends BaseActivity {
         if (savedInstanceState == null) {
             requireUnlockIfNeeded();
         }
+
+        // 在线更新：6 小时内只静默查一次，有新版本才提示；
+        // 开了应用锁时不自动弹，避免两层弹窗叠在一起（设置页仍可手动检查）
+        if (!SessionManager.get().isAppLockEnabled()) {
+            UpdatePrompt.checkQuietly(this);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 用户从「安装未知应用」授权页返回后，自动继续安装
+        UpdatePrompt.resumePendingInstall(this);
     }
 
     // ---------------- 应用锁 ----------------

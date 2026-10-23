@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- FileProvider 只暴露在线更新下载目录（getExternalFilesDir("update")） -->
+<paths>
+    <external-files-path name="update" path="update/" />
+    <files-path name="update_internal" path="update/" />
+</paths>

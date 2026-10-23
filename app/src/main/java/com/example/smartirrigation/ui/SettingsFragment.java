@@ -67,6 +67,7 @@ public class SettingsFragment extends BaseFragment {
 
         fillAbout();
         bindSwitches();
+        UpdatePrompt.bindRow(requireActivity(), find(R.id.rowCheckUpdate), find(R.id.tvUpdateState));
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +100,10 @@ public class SettingsFragment extends BaseFragment {
         }
         if (tvBuildDate != null) {
             tvBuildDate.setText(BuildConfig.BUILD_DATE);
+        }
+        TextView tvUpdateState = find(R.id.tvUpdateState);
+        if (tvUpdateState != null) {
+            tvUpdateState.setText("当前 v" + BuildConfig.VERSION_NAME + " · 点此检查新版");
         }
     }
 

@@ -37,3 +37,24 @@
 - 命令行：`gradlew.bat assembleDebug`
 - 产物：`app/build/outputs/apk/debug/app-debug.apk`（已生成，可直接安装）
 - 演示账号：`demo / demo123`；也可点“一键演示账号”看离线缓存数据。
+
+## 在线更新（GitHub Releases）
+版本源就是本仓库的 Releases，**发一个 Release，所有装了 App 的人都能自助升级**，不需要重新扫码发安装包。
+
+用户侧：
+- 启动 App 时静默检查（6 小时内最多一次），有新版本才弹窗；设置 → 关于 →「检查更新」可手动查。
+- 弹窗展示版本号、安装包大小与更新说明，点「立即更新」下载 → 自动拉起系统安装器。
+- Android 8+ 首次需允许「安装未知应用」，授权返回后自动续装（`UpdateManager.takePendingApk`）。
+- 下载顺序：GitHub 直链 → `gh-proxy.com` → `ghproxy.net`，任一条通即可，避免单一线路被拦。
+
+发版三步（维护者）：
+1. 改 `app/build.gradle`：`versionCode` +1、`versionName` 改新版本号（两者必须同步）。
+2. 提交并推送：`git add -A && git commit -m "release: v1.1" && git push`。
+3. 发版：`powershell -ExecutionPolicy Bypass -File tools\publish-release.ps1 -Version 1.1 -Notes "本次更新说明"`，
+   脚本会校验版本号 → `assembleRelease` → 创建 `v1.1` Release → 上传 `smart-irrigation-v1.1.apk`。
+   Token 可用 `-Token`、环境变量 `GITHUB_TOKEN`，或运行后交互粘贴（需 `repo` 权限）。
+
+注意：
+- 在线更新要求**新旧 APK 签名一致**。默认 release 用 debug 签名（免配置）；要换正式签名就在根目录放
+  `keystore.properties`（`storeFile/storePassword/keyAlias/keyPassword`，已 gitignore），换签名后老用户需先卸载。
+- 判断新旧只看 `versionName`（`UpdateRelease.compareVersion`），所以漏改版本号会导致“永远提示已是最新”。

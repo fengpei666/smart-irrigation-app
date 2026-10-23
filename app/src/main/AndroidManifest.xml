@@ -4,6 +4,8 @@
     <!-- 权限最小化：仅网络相关；契约要求必须 https，故关闭明文流量 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 在线更新：下载完 APK 后拉起系统安装器（Android 8+ 还需用户手动授权） -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name=".SmartIrrigationApp"
@@ -38,6 +40,17 @@
         <activity android:name=".ui.ZonesActivity" android:exported="false" />
         <activity android:name=".ui.CalibrationActivity" android:exported="false" />
         <activity android:name=".ui.WaterReportActivity" android:exported="false" />
+
+        <!-- 只把 update/ 目录暴露给系统安装器，不用 externalPath 全盘共享 -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 
