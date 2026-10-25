@@ -12,3 +12,6 @@ captures/
 keystore.properties
 *.jks
 *.keystore
+
+# 比赛提交包（本地生成）
+dist/
