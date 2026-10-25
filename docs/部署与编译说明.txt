@@ -1,0 +1,222 @@
+﻿========================================================================
+智慧灌溉 App —— 部署与编译说明
+========================================================================
+
+一、交付内容
+------------------------------------------------------------------------
+  1. 安装包   01-安装包\智慧灌溉App-v1.1.apk    可直接安装运行，无需后端也可以进入演示模式
+  2. 源代码   02-源代码\                          完整 Android 工程，可直接编译
+  3. 文档     03-说明文档\                        功能说明与本文件
+
+  包名：com.example.smartirrigation
+  版本：1.1（versionCode 2）
+  安装包大小：5,432,517 字节
+  SHA-256：BD7951857BD5C96F159C109EC8DAA2D01EF3DE8377470727796E0CFAA6414AFB
+
+
+二、运行环境（客户端）
+------------------------------------------------------------------------
+  操作系统   Android 6.0（API 24）及以上，实测 Android 10 / 13 / 15
+  网络       需可访问 https 后端；离线可进入演示模式
+  权限       网络访问、安装未知应用（在线更新时用于拉起安装器）
+  存储       安装包约 6 MB，下载更新时额外占用约 6 MB
+
+
+三、开发与编译环境（软件清单及下载地址）
+------------------------------------------------------------------------
+  以下为实际编译通过的完整环境，全部工具均可免费下载。
+
+  1) JDK（Java 开发工具包）
+     版本：JDK 17 及以上（本项目源码级别为 Java 17，实测 JDK 21）
+     说明：安装 Android Studio 后自带的 JBR 21 即可直接使用，无需另装。
+     下载：https://adoptium.net/temurin/releases/?version=17
+     备用：https://www.oracle.com/java/technologies/downloads/#java17
+
+  2) Android Studio（集成开发环境，推荐方式）
+     版本：2024.2 及以上（支持 AGP 8.7）
+     下载（官方）：https://developer.android.com/studio
+     下载（国内镜像）：https://developer.android.google.cn/studio
+
+  3) Android SDK（编译所需的平台与工具）
+     Android Studio 首次启动时通过 SDK Manager 自动安装，也可单独下载命令行工具：
+     命令行工具下载：https://developer.android.com/studio#command-line-tools-only
+     本项目所需的 SDK 组件：
+       - Android SDK Platform 35（Android 15）        compileSdk = 35
+       - Android SDK Build-Tools 35.0.1               buildToolsVersion = 35.0.1
+       - Android SDK Platform-Tools（adb，可选）
+       - Android SDK Command-line Tools（可选）
+     最低支持版本 minSdk = 24，目标版本 targetSdk = 34
+
+  4) Gradle（构建工具）
+     版本：8.13
+     说明：工程已内置 Gradle Wrapper（gradlew.bat），首次构建自动下载，无需手动安装。
+     下载：https://services.gradle.org/distributions/gradle-8.13-bin.zip
+
+  5) Android Gradle Plugin（AGP）
+     版本：8.7.3（在根目录 build.gradle 中声明，构建时自动下载）
+
+  6) Git（可选，用于版本管理）
+     下载：https://git-scm.com/download/win
+
+  7) 文本编辑器 / 其他
+     说明：无需 Node.js、Python、数据库等额外运行环境，纯 Android 原生工程。
+
+
+四、第三方依赖库清单
+------------------------------------------------------------------------
+  全部依赖由 Gradle 自动从仓库下载，无需手工放置 jar 包。首次构建需联网。
+
+  依赖库                                版本        用途
+  androidx.appcompat:appcompat          1.6.1       基础界面兼容库
+  com.google.android.material:material  1.9.0       Material Design 组件
+  androidx.constraintlayout             2.1.4       布局约束
+  androidx.recyclerview                 1.3.2       列表
+  androidx.swiperefreshlayout           1.1.0       下拉刷新
+  com.squareup.retrofit2:retrofit       2.9.0       HTTP 接口封装
+  com.squareup.retrofit2:converter-gson 2.9.0       JSON 解析适配
+  com.squareup.okhttp3:okhttp           4.11.0      网络底层
+  com.squareup.okhttp3:logging          4.11.0      调试日志
+  com.github.PhilJay:MPAndroidChart     v3.1.0      历史曲线图表
+
+  仓库地址（工程 settings.gradle 中已配置）：
+    Google Maven    https://maven.google.com
+    Maven Central   https://repo1.maven.org/maven2/
+    JitPack         https://jitpack.io
+  国内访问慢时可将上述仓库替换为阿里云镜像：
+    https://maven.aliyun.com/repository/public
+    https://maven.aliyun.com/repository/google
+    https://maven.aliyun.com/repository/gradle-plugin
+
+  各库主页（备查）：
+    Retrofit        https://github.com/square/retrofit
+    OkHttp          https://github.com/square/okhttp
+    MPAndroidChart  https://github.com/PhilJay/MPAndroidChart
+    Material 组件    https://github.com/material-components/material-components-android
+
+
+五、编译步骤
+------------------------------------------------------------------------
+  方式一：Android Studio（推荐）
+    1. 打开 Android Studio，选择 Open
+    2. 选择解压后的 02-源代码 目录（不是 01-安装包 或 03-说明文档）
+    3. 等待 Gradle Sync 完成（首次需下载 Gradle 8.13 与依赖，约 3~10 分钟，取决于网络）
+    4. 菜单 Build → Build Bundle(s) / APK(s) → Build APK(s)
+    5. 生成位置：app\build\outputs\apk\debug\app-debug.apk
+
+  方式二：命令行（Windows）
+    1. 确认已安装 JDK 17+，并设置环境变量 JAVA_HOME
+    2. 确认已安装 Android SDK，并设置 ANDROID_HOME（或按方式一先 Sync 一次生成 local.properties）
+    3. 进入源码目录并构建：
+         cd 02-源代码
+         gradlew.bat assembleDebug
+       发布包：
+         gradlew.bat assembleRelease
+    4. 产物位置：
+         调试包  app\build\outputs\apk\debug\app-debug.apk
+         发布包  app\build\outputs\apk\release\app-release.apk
+
+  方式三：命令行（macOS / Linux，可选）
+         cd 02-源代码
+         chmod +x gradlew
+         ./gradlew assembleDebug
+
+  说明：
+    - 工程未包含 local.properties（其中记录的是本机 SDK 绝对路径），首次打开由
+      Android Studio 自动生成；命令行构建则依赖 ANDROID_HOME 环境变量。
+    - 工程所在路径包含中文时可以正常构建（gradle.properties 中已开启
+      android.overridePathCheck=true）。若仍有异常，请把工程移动到纯英文路径再试。
+
+
+六、安装与部署
+------------------------------------------------------------------------
+  1. 安装 APK
+     将 01-安装包\智慧灌溉App-v1.1.apk 传到手机安装；若被拦截，需在系统设置中
+     允许该来源安装应用。
+
+  2. 后端服务
+     App 为纯客户端，所有灌溉调度、阈值判断、AI 建议都在服务端完成。
+     后端地址集中配置在一处：
+         app/src/main/java/com/example/smartirrigation/network/NetworkModule.java
+         常量 BASE_URL
+     当前地址：https://xn--ghq556e.cc/   （中文域名“下注.cc”的 punycode 形式）
+     要求：必须为 https（AndroidManifest 已关闭明文 HTTP 流量），接口路径以 /api/app/
+     开头。更换服务器域名只需修改 BASE_URL，其余代码无需改动。
+
+  3. 演示与验收
+     - 演示账号：demo / demo123
+     - 若无法连接后端，可在登录页点击“一键演示账号”，使用 App 内置离线缓存数据
+       完整体验全部页面（首页、控制、AI、告警、设置等）。
+     - 设备绑定：输入设备 SN 与 6 位配网码；未绑定设备时首页会提示先绑定。
+
+  4. 首次启动的权限
+     - 网络权限随安装自动授予
+     - 在线更新下载 APK 后，系统会要求允许“安装未知应用”，授权后自动继续安装
+
+
+七、签名与发布
+------------------------------------------------------------------------
+  - 工程默认使用 debug 签名，无需任何配置即可 build 出可安装的 release 包，便于验收。
+  - 如需正式签名，在工程根目录新建 keystore.properties，内容为：
+        storeFile=你的签名文件相对路径.jks
+        storePassword=签名库密码
+        keyAlias=密钥别名
+        keyPassword=密钥密码
+    之后 assembleRelease 会自动使用该签名（该文件已在 .gitignore 中忽略，不会泄露）。
+  - 生成签名文件示例命令：
+        keytool -genkeypair -v -keystore release.jks -alias irrigation -keyalg RSA -keysize 2048 -validity 10000
+  - 注意：在线更新要求新旧安装包签名一致，更换签名后，手机上需先卸载旧版本再安装。
+
+
+八、在线更新（可选功能，不影响本地运行）
+------------------------------------------------------------------------
+  App 内置自助更新：启动时（6 小时内最多一次）或手动点击“设置 → 关于 → 检查更新”
+  会查询版本发布页，发现新版本即提示下载并安装。
+
+  版本发布页（公开可访问）：
+      https://github.com/fengpei666/smart-irrigation-app/releases
+
+  维护者发版流程：
+      1. 修改 app/build.gradle：versionCode 加 1、versionName 改为新版本号
+      2. 提交代码
+      3. 执行 tools\publish-release.ps1 -Version 版本号 -Notes "更新说明"
+         脚本会校验版本号、编译 release 包、创建 Release 并上传 APK
+      4. 脚本需要的 GitHub Token（repo 权限）申请地址：
+         https://github.com/settings/tokens
+
+  说明：该功能依赖外网访问 GitHub；若网络受限，App 会自动在直连与镜像之间切换，
+  仍失败时可在手机浏览器打开上面的发布页手动下载安装。
+
+
+九、常见问题
+------------------------------------------------------------------------
+  1. 首次 Sync 卡住或下载依赖失败
+     多为网络问题。可在 settings.gradle 中把 google()/mavenCentral() 替换为第四节
+     列出的阿里云镜像地址，或在 Android Studio 中配置 HTTP 代理。
+
+  2. 提示 “Your project path contains non-ASCII characters”
+     这是 AGP 对中文路径的限制。本工程已在 gradle.properties 中开启
+     android.overridePathCheck=true，可正常构建；若仍报错，请移动到英文路径。
+
+  3. assembleRelease 报无法解析 lint-gradle
+     表示当前处于断网状态且缓存缺失，可联网重试，或执行：
+         gradlew.bat assembleRelease -x lintVitalRelease -x lintVitalAnalyzeRelease
+
+  4. 安装时提示“应用未安装”或“签名冲突”
+     手机上已存在签名不同的旧版本，先卸载旧版本再安装。
+
+  5. 首页一直显示离线
+     检查 BASE_URL 是否可达；确认后端为 https 且证书有效。离线时页面会展示最后一次
+     缓存数据并标注“离线”。
+
+  6. 历史曲线空白
+     需要该设备至少上报过一次数据；可在后端确认 /api/app/device/history 是否有返回。
+
+
+十、验收自检信息
+------------------------------------------------------------------------
+  安装后可在“设置 → 关于”看到：
+      版本号        v1.1
+      构建日期      随构建日期自动写入
+      检查更新      点击可查询是否有新版本
+  联系方式 / 署名：fengpei
+========================================================================
